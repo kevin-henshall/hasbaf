@@ -1,0 +1,48 @@
+<project name="DatabaseTest" basedir=".">
+
+    <taskdef name="sqlunit" classname="net.sourceforge.sqlunit.ant.SqlunitTask"/>
+
+    <property name="projects.dir" location="../../"/>
+
+    <import file="${projects.dir}/Build/antIncludes/database.xml"/>
+    <import file="${projects.dir}/Build/antIncludes/common.xml"/>
+
+    <property name="build.dir" location="build"/>
+    <property name="test.dir" location="test"/>
+    <property name="doc.dir" location="${build.dir}/doc"/>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/sqlUnit"/>
+        <mkdir dir="${doc.dir}"/>
+        <mkdir dir="${doc.dir}/reports"/>
+    </target>
+
+    <target name="prepareSqlUnitFiles">
+        <copy
+            todir="${build.dir}/sqlUnit"
+            overwrite="true">
+            <fileset
+                dir="${test.dir}/sqlUnit"
+                includes="*.xml"/>
+            <filterchain>
+                <expandProperties/>
+            </filterchain>
+        </copy>
+    </target>
+
+    <target name="testSqlUnitTableCreation">
+        <sqlunit
+            testfile="${build.dir}/sqlUnit/tableCreation.xml"
+            logFile="${doc.dir}/reports/TEST-tableCreation.xml"
+            haltOnFailure="true"
+            debug="false"/>
+    </target>
+
+    <target name="test" description="Run sql unit tests">
+        <antcall target="init"/>
+        <antcall target="prepareSqlUnitFiles"/>
+        <antcall target="testSqlUnitTableCreation"/>
+    </target>
+
+</project>

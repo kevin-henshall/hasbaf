@@ -1,0 +1,14 @@
+<project name="CommonBuild" basedir=".">
+
+    <typedef resource="net/sf/antcontrib/antlib.xml" />
+
+    <property name="projects.dir" location="../../"/>
+
+    <!-- load env.properties file -->
+    <property file="${projects.dir}/Build/etc/env.properties"/>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+</project>

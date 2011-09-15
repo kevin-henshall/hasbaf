@@ -1,0 +1,20 @@
+<project name="Temp">
+    <property name="project.dir" location="../../"/>
+    <import file="${project.dir}/Build/antIncludes/haskell.xml"/>
+    <import file="${project.dir}/Build/antIncludes/common.xml"/>
+
+    <property name="src.dir" location="Src"/>
+    <property name="build.dir" location="Build"/>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="build" depends="init">
+        <ghc
+            mainSourceFile="${src.dir}/Main.hs"
+            outputDir="${build.dir}"
+            outputFilename="temp"/>
+    </target>
+    
+</project>

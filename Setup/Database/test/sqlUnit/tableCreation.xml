@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlunit SYSTEM "file:etc/sqlunit.dtd">
+
+<sqlunit>
+    <connection>
+        <driver>${db.driver}</driver>
+        <url>${db.url}</url>
+        <user>${db.username}</user>
+        <password>${db.password}</password>
+    </connection>
+
+    <test name="changelogTableCreation" failure-message="Changelog table does 
+    not exist">
+        <skip/>
+        <sql>
+            <stmt>
+                select * from Changelog;
+            </stmt>
+        </sql>
+        <result>
+            <resultset id="1">
+                <row id="1">
+                    <col id="1" name="numCount" type="NUMERIC">3</col>
+                </row>
+            </resultset>
+        </result>
+    </test>
+</sqlunit>

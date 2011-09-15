@@ -1,0 +1,68 @@
+<project name="DatabaseCommon">
+    <property name="project.dir" location="../../"/>
+
+    <import file="${project.dir}/Build/antIncludes/common.xml"/>
+
+    <property name="src.dir" location="Src"/>
+    <property name="build.dir" location="build"/>
+
+    <path id="hsql.classpath">
+        <fileset dir="${project.dir}/Build/lib/hsql">
+            <include name="hsqldb*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="sqlite.classpath">
+        <fileset dir="${project.dir}/Build/lib/sqlite">
+            <include name="sqlite*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="dbdeploy.classpath">
+        <fileset dir="${project.dir}/Build/lib/dbDeploy">
+            <include name="dbdeploy-ant-*.jar"/>
+        </fileset>
+        <!--
+            dbdeploy task also needs the database driver jar on the classpath
+        -->
+        <path refid="hsql.classpath"/>
+        <path refid="sqlite.classpath"/>
+    </path>
+
+    <taskdef
+        name="dbdeploy"
+        classname="com.dbdeploy.AntTarget"
+        classpathref="dbdeploy.classpath"/>
+
+    <macrodef name="sqlite">
+        <attribute
+            name="database"
+            description="Database file"/>
+        <attribute
+            name="operation"
+            description="Operation to perform"/>
+        <attribute
+            name="sourceDir"
+            description="Sql file to execute"/>
+        <sequential>
+            <copy todir="${build.dir}">
+                <fileset dir="@{sourceDir}"/>
+                <filterchain>
+                    <expandproperties/>
+                </filterchain>
+            </copy>
+            <for param="file">
+                <path>
+                    <fileset dir="${build.dir}" includes="*.sql"/>
+                </path>
+                <sequential>
+                    <exec executable="sqlite3">
+                        <arg value="@{database}"/>
+                        <arg value="@{operation} @{file}"/>
+                    </exec>
+                </sequential>
+            </for>
+        </sequential>
+    </macrodef>
+
+</project>

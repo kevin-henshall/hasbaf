@@ -1,0 +1,20 @@
+<project name="Haskell">
+
+    <macrodef name="ghc">
+        <attribute
+            name="mainSourceFile"
+            description="Location of main haskell source file"/>
+        <attribute
+            name="outputDir"
+            description="Location of directory to place output files"/>
+        <attribute
+            name="outputFilename"
+            description="Filename of generated executable"/>
+        <sequential>
+            <exec executable="ghc">
+                <arg line="-outputdir @{outputDir} -o @{outputDir}/@{outputFilename} --make @{mainSourceFile}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+</project>

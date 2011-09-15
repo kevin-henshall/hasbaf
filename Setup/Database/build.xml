@@ -1,0 +1,39 @@
+<project name="Database">
+    <property name="project.dir" location="../../"/>
+    <import file="${project.dir}/Build/antIncludes/common.xml"/>
+    <import file="${project.dir}/Build/antIncludes/database.xml"/>
+
+    <property name="changelogTableName" value="Changelog"/>
+
+    <property name="changelog.create" location="schemas/changelog/create"/>
+
+    <target name="dropDatabase" description="delete database">
+        <delete dir="${db.location}"/>
+    </target>
+
+    <target name="createDatabase" description="create database">
+        <mkdir dir="${db.location}"/>
+    </target>
+
+    <target name="createChangelogTable" depends="createDatabase" 
+    description="create changelog table for use by dbdeploy">
+        <trycatch>
+           <try>
+               <sql
+                   driver="${db.driver}"
+                   url="${db.url}"
+                   userid="${db.username}"
+                   password="${db.password}">
+                   SELECT * FROM ${changelogTableName};
+               </sql>
+            </try>
+            <catch>
+                <sqlite
+                    database="${db.location}/${db.name}"
+                    operation=".read"
+                    sourceDir="${changelog.create}"/>
+            </catch>
+        </trycatch>
+    </target>
+    
+</project>
